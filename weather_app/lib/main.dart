@@ -9,7 +9,7 @@ class myApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: weather(),
       debugShowCheckedModeBanner: false,
     );
@@ -22,6 +22,7 @@ class weather extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -81,11 +82,35 @@ class weather extends StatelessWidget {
                   ),
                 ),
               ),
+              Container(
+                height: 70,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: const Color.fromARGB(255, 233, 233, 233),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 10, top: 15),
+                  child: TextFormField(
+                    cursorColor: Colors.black,
+                    cursorHeight: 30,
+                    cursorWidth: 1,
+                    decoration: const InputDecoration(
+                        hintText: "Search for city weather",
+                        hintStyle: TextStyle(fontFamily: "Noto", color: Color.fromARGB(255, 173, 173, 173)),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        )),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Container(
                   width: double.infinity,
-                  height: 250,
+                  height: 265,
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 6, 64, 112),
                     borderRadius: BorderRadius.all(
@@ -119,7 +144,7 @@ class weather extends StatelessWidget {
                                     ),
                                     Text(
                                       "Sun with a cool",
-                                      style: TextStyle(color: Colors.white, fontFamily: "Noto"),
+                                      style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                     ),
                                   ],
                                 ),
@@ -134,15 +159,101 @@ class weather extends StatelessWidget {
                         Divider(
                           color: Colors.grey,
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.device_thermostat,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        "28°",
+                                        style: TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    "Sensible",
+                                    style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                  ),
+                                ],
+                              ),
+                              //
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.opacity,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "60%",
+                                        style: TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    "Humidity",
+                                    style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.air,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "18 Km/h",
+                                        style: TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    "Force",
+                                    style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.device_thermostat,
+                                      Icons.speed,
                                       color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
                                     ),
                                     Text(
                                       "28°",
@@ -151,13 +262,62 @@ class weather extends StatelessWidget {
                                   ],
                                 ),
                                 Text(
-                                  "Sensible",
-                                  style: TextStyle(color: Colors.grey, fontFamily: "Noto"),
+                                  "Pressure",
+                                  style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                ),
+                              ],
+                            ),
+                            //
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.visibility,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "60%",
+                                      style: TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  "Visibility",
+                                  style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.water_drop,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "18 Km/h",
+                                      style: TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  "Dew Point",
+                                  style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                 ),
                               ],
                             )
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
