@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:weather/weather.dart';
 import 'package:weather_app/constants/api_key.dart';
@@ -26,10 +28,11 @@ class weather extends StatefulWidget {
 }
 
 class _weatherState extends State<weather> {
+  List weatherList = [];
+
   TextEditingController searchController = TextEditingController();
 
   final WeatherFactory _wf = WeatherFactory(API_KEY);
-  List mylist = [];
   Weather? _weather;
 
   @override
@@ -43,6 +46,10 @@ class _weatherState extends State<weather> {
   }
 
   getWeatherData() {
+    if (searchController.text.isEmpty) {
+      searchController.text = "Karachi";
+    }
+
     _wf.currentWeatherByCityName(searchController.text.toString()).then((w) {
       setState(() {
         _weather = w;
@@ -91,13 +98,48 @@ class _weatherState extends State<weather> {
                   ),
                 ),
               ),
-              ElevatedButton(
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: double.infinity,
+                height: 70,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 2, 25, 44),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: ElevatedButton(
+                  style: const ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 2, 25, 44)),
+                  ),
                   onPressed: () {
                     setState(() {
+                      //
+                      weatherList.insertAll(0, [
+                        [
+                          _weather?.weatherMain,
+                          _weather?.weatherDescription,
+                          _weather?.temperature?.celsius?.toStringAsFixed(0),
+                          _weather?.tempFeelsLike?.celsius?.toStringAsFixed(0),
+                          _weather?.humidity?.toStringAsFixed(0),
+                          _weather?.windSpeed?.toStringAsFixed(0),
+                          _weather?.pressure?.toStringAsFixed(0),
+                          _weather?.windDegree?.toStringAsFixed(0),
+                          _weather?.cloudiness.toString(),
+                        ]
+                      ]);
                       getWeatherData();
+                      print(weatherList);
                     });
                   },
-                  child: const Text("data")),
+                  child: const Text(
+                    "Hit to get the weather",
+                    style: TextStyle(color: Colors.white, fontFamily: "NotoB", fontSize: 15),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Container(
@@ -136,7 +178,8 @@ class _weatherState extends State<weather> {
                                     ),
                                     Text(
                                       _weather?.weatherDescription ?? "",
-                                      style: const TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                      style: const TextStyle(
+                                          color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                     ),
                                   ],
                                 ),
@@ -191,7 +234,7 @@ class _weatherState extends State<weather> {
                                         width: 5,
                                       ),
                                       Text(
-                                        "${_weather?.humidity.toString()} %" ?? "0.00",
+                                        "${_weather?.humidity?.toStringAsFixed(0)} %" ?? "0.00",
                                         style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                       ),
                                     ],
@@ -215,7 +258,7 @@ class _weatherState extends State<weather> {
                                         width: 5,
                                       ),
                                       Text(
-                                        "${_weather?.windSpeed.toString()} Km/h" ?? "0.00",
+                                        "${_weather?.windSpeed?.toStringAsFixed(0)} Km/h" ?? "0.00",
                                         style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                       ),
                                     ],
@@ -279,7 +322,7 @@ class _weatherState extends State<weather> {
                                   ],
                                 ),
                                 const Text(
-                                  "Wind",
+                                  "Wind Degree",
                                   style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                 ),
                               ],
