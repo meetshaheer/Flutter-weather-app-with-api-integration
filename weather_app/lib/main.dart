@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:weather/weather.dart';
+import 'package:weather_app/constants/api_key.dart';
 
 void main(List<String> args) {
   runApp(myApp());
@@ -16,8 +18,37 @@ class myApp extends StatelessWidget {
   }
 }
 
-class weather extends StatelessWidget {
+class weather extends StatefulWidget {
   const weather({super.key});
+
+  @override
+  State<weather> createState() => _weatherState();
+}
+
+class _weatherState extends State<weather> {
+  TextEditingController searchController = TextEditingController();
+
+  final WeatherFactory _wf = WeatherFactory(API_KEY);
+  List mylist = [];
+  Weather? _weather;
+
+  @override
+  void initState() {
+    super.initState();
+    _wf.currentWeatherByCityName("Karachi").then((w) {
+      setState(() {
+        _weather = w;
+      });
+    });
+  }
+
+  getWeatherData() {
+    _wf.currentWeatherByCityName(searchController.text.toString()).then((w) {
+      setState(() {
+        _weather = w;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,58 +60,9 @@ class weather extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
           child: Column(
             children: [
-              Container(
-                width: double.infinity,
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 220, 219, 219),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(50),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.adjust,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Text(
-                        "Dashboard",
-                        style: TextStyle(fontFamily: "NotoB", fontSize: 15),
-                      ),
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.notification_important,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          const Positioned(
-                            right: 0,
-                            child: CircleAvatar(
-                              radius: 5,
-                              backgroundColor: Colors.red,
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+              appBar(),
+              const SizedBox(
+                height: 10,
               ),
               Container(
                 height: 70,
@@ -92,12 +74,15 @@ class weather extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10, bottom: 10, top: 15),
+                  padding: EdgeInsets.only(left: 10.0, right: 10, bottom: 10, top: 15),
                   child: TextFormField(
+                    controller: searchController,
                     cursorColor: Colors.black,
+                    // textInputAction: TextInputAction.search,
                     cursorHeight: 30,
                     cursorWidth: 1,
                     decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search_outlined),
                         hintText: "Search for city weather",
                         hintStyle: TextStyle(fontFamily: "Noto", color: Color.fromARGB(255, 173, 173, 173)),
                         border: OutlineInputBorder(
@@ -106,6 +91,13 @@ class weather extends StatelessWidget {
                   ),
                 ),
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      getWeatherData();
+                    });
+                  },
+                  child: Text("data")),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Container(
@@ -117,7 +109,7 @@ class weather extends StatelessWidget {
                       Radius.circular(50),
                     ),
                   ),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.all(30),
                     child: Column(
                       children: [
@@ -126,12 +118,12 @@ class weather extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Icon(
-                                  Icons.cloud,
-                                  color: Colors.white,
-                                  size: 70,
-                                ),
-                                SizedBox(
+                                // Icon(
+                                //   Icons.cloud,
+                                //   color: Colors.white,
+                                //   size: 70,
+                                // ),
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Column(
@@ -139,11 +131,11 @@ class weather extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Cloudy",
+                                      _weather?.weatherMain ?? "0",
                                       style: TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                     ),
                                     Text(
-                                      "Sun with a cool",
+                                      _weather?.weatherDescription ?? "",
                                       style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                     ),
                                   ],
@@ -151,7 +143,7 @@ class weather extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              "26°",
+                              "${_weather?.temperature?.celsius?.toStringAsFixed(0)}°C",
                               style: TextStyle(color: Colors.white, fontFamily: "Noto", fontSize: 50),
                             )
                           ],
@@ -325,6 +317,69 @@ class weather extends StatelessWidget {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class appBar extends StatelessWidget {
+  const appBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 100,
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 220, 219, 219),
+        borderRadius: BorderRadius.all(
+          Radius.circular(50),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.white,
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.adjust,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            const Text(
+              "Dashboard",
+              style: TextStyle(fontFamily: "NotoB", fontSize: 15),
+            ),
+            Stack(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.notification_important,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const Positioned(
+                  right: 0,
+                  child: CircleAvatar(
+                    radius: 5,
+                    backgroundColor: Colors.red,
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
