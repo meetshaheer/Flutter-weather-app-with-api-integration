@@ -144,7 +144,7 @@ class _weatherState extends State<weather> {
                 padding: const EdgeInsets.only(top: 10),
                 child: Container(
                   width: double.infinity,
-                  height: 265,
+                  height: 400,
                   decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 6, 64, 112),
                     borderRadius: BorderRadius.all(
@@ -152,9 +152,20 @@ class _weatherState extends State<weather> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(30),
+                    padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 10),
                     child: Column(
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${_weather?.areaName}, ${_weather?.country}  --- ",
+                              style: TextStyle(color: Colors.white, fontFamily: "Noto", fontSize: 15),
+                            ),
+                            Text(_weather?.date?.toLocal().toString().substring(10, 19) ?? "",
+                                style: TextStyle(color: Colors.white, fontFamily: "Noto", fontSize: 15)),
+                          ],
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -213,17 +224,17 @@ class _weatherState extends State<weather> {
                                   Row(
                                     children: [
                                       const Icon(
-                                        Icons.device_thermostat,
+                                        Icons.sunny,
                                         color: Colors.white,
                                       ),
                                       Text(
-                                        _weather?.tempFeelsLike?.celsius?.toStringAsFixed(0) ?? "0",
+                                        "${_weather?.sunrise?.toLocal().toString().substring(10, 16)} AM" ?? "",
                                         style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                       ),
                                     ],
                                   ),
                                   const Text(
-                                    "Sensible",
+                                    "Sunrise",
                                     style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                   ),
                                 ],
@@ -235,20 +246,17 @@ class _weatherState extends State<weather> {
                                   Row(
                                     children: [
                                       const Icon(
-                                        Icons.opacity,
+                                        Icons.sunny_snowing,
                                         color: Colors.white,
                                       ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
                                       Text(
-                                        "${_weather?.humidity?.toStringAsFixed(0)} %" ?? "0.00",
+                                        "${_weather?.sunset?.toLocal().toString().substring(10, 16)} Pm" ?? "",
                                         style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                       ),
                                     ],
                                   ),
                                   const Text(
-                                    "Humidity",
+                                    "Sunset",
                                     style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                   ),
                                 ],
@@ -259,26 +267,106 @@ class _weatherState extends State<weather> {
                                   Row(
                                     children: [
                                       const Icon(
-                                        Icons.air,
+                                        Icons.snowing,
                                         color: Colors.white,
                                       ),
                                       const SizedBox(
                                         width: 5,
                                       ),
                                       Text(
-                                        "${_weather?.windSpeed?.toStringAsFixed(0)} Km/h" ?? "0",
+                                        _weather?.rainLastHour?.toStringAsFixed(0) == null
+                                            ? "No Rain"
+                                            : _weather!.rainLastHour.toString(),
                                         style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                       ),
                                     ],
                                   ),
                                   const Text(
-                                    "Force",
+                                    "Rain",
                                     style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
                                   ),
                                 ],
                               )
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.device_thermostat,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      _weather?.tempFeelsLike?.celsius?.toStringAsFixed(0) ?? "0",
+                                      style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                    ),
+                                  ],
+                                ),
+                                const Text(
+                                  "Sensible",
+                                  style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                ),
+                              ],
+                            ),
+                            //
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.opacity,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "${_weather?.humidity?.toStringAsFixed(0)} %" ?? "0.00",
+                                      style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                    ),
+                                  ],
+                                ),
+                                const Text(
+                                  "Humidity",
+                                  style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.air,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "${_weather?.windSpeed?.toStringAsFixed(0)} Km/h" ?? "0",
+                                      style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
+                                    ),
+                                  ],
+                                ),
+                                const Text(
+                                  "Force",
+                                  style: TextStyle(color: Color.fromARGB(255, 212, 212, 212), fontFamily: "Noto"),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                         const SizedBox(
                           height: 20,
