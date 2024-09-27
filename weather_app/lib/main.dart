@@ -165,6 +165,14 @@ class _weatherState extends State<weather> {
                                 //   color: Colors.white,
                                 //   size: 70,
                                 // ),
+                                Container(
+                                  width: 70,
+                                  height: 70,
+                                  // color: Colors.amber,
+                                  child: Image(
+                                      image: NetworkImage(
+                                          "https://openweathermap.org/img/wn/${_weather?.weatherIcon}@4x.png")),
+                                ),
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -258,7 +266,7 @@ class _weatherState extends State<weather> {
                                         width: 5,
                                       ),
                                       Text(
-                                        "${_weather?.windSpeed?.toStringAsFixed(0)} Km/h" ?? "0.00",
+                                        "${_weather?.windSpeed?.toStringAsFixed(0)} Km/h" ?? "0",
                                         style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                       ),
                                     ],
@@ -316,7 +324,9 @@ class _weatherState extends State<weather> {
                                       width: 5,
                                     ),
                                     Text(
-                                      "${_weather?.windDegree?.toStringAsFixed(0)}°" ?? "0",
+                                      _weather?.windDegree?.toStringAsFixed(0) == "0"
+                                          ? "No"
+                                          : "${_weather?.windDegree?.toStringAsFixed(0)}°",
                                       style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                     ),
                                   ],
@@ -340,7 +350,9 @@ class _weatherState extends State<weather> {
                                       width: 5,
                                     ),
                                     Text(
-                                      _weather?.cloudiness.toString() ?? "0",
+                                      _weather?.cloudiness?.toStringAsFixed(0) == "0"
+                                          ? "No"
+                                          : "${_weather?.cloudiness?.toStringAsFixed(0)}%",
                                       style: const TextStyle(color: Colors.white, fontFamily: "NotoB"),
                                     ),
                                   ],
